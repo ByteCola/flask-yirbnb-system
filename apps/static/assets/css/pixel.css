@@ -4,10 +4,10 @@
 * Pixel Free Bootstrap 5 UI Kit
 =========================================================
 
-* Product Page: https://bytecola.com/product/ui-kit/pixel-free-bootstrap-5-ui-kit
-* Copyright 2021 ByteCola (https://www.bytecola.com)
+* Product Page: https://bytecola.ncre2.cn/product/ui-kit/pixel-free-bootstrap-5-ui-kit
+* Copyright 2021 ByteCola (https://www.bytecola.ncre2.cn)
 
-* Coded by https://bytecola.com
+* Coded by https://bytecola.ncre2.cn
 
 =========================================================
 

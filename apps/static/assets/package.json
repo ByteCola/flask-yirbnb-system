@@ -19,13 +19,13 @@
         "gulp",
         "web"
     ],
-    "homepage": "https://bytecola.com/product/ui-kit/pixel-free-bootstrap-5-ui-kit",
+    "homepage": "https://bytecola.ncre2.cn/product/ui-kit/pixel-free-bootstrap-5-ui-kit",
     "repository": {
         "type": "git",
         "url": "https://github.com/ByteCola/pixel-bootstrap-ui-kit"
     },
     "bugs": {
-        "email": "support@bytecola.com"
+        "email": "support@bytecola.ncre2.cn"
     },
     "license": "MIT License",
     "devDependencies": {
