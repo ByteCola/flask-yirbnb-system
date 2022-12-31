@@ -6,10 +6,10 @@ Copyright (c) 2019 - present AppSeed.us
 import os
 from decouple import config
 
+
 # 网站配置相关
 
 class Config(object):
-
     basedir = os.path.abspath(os.path.dirname(__file__))
 
     # Set up the App SECRET_KEY
@@ -28,14 +28,12 @@ class Config(object):
     EMAIL_CONFIRMATION_REQUIRED = True  # Or True, if emails to be sent
 
     # SMTP server credentials
-    MAIL_SERVER = "smtp.163.com"
-    MAIL_PORT = 25
-    MAIL_USERNAME = "pleasesayhi@163.com"
-    MAIL_PASSWORD = "GZQXZINXQHRQALNG"
-    MAIL_USE_TSL = True
-    MAIL_USE_SSL = False
-
-
+    MAIL_SERVER = config('MAIL_SERVER', default="smtp.163.com"),
+    MAIL_PORT = config('MAIL_PORT', default=25),
+    MAIL_USERNAME = config('MAIL_USERNAME', default=""),
+    MAIL_PASSWORD = config('MAIL_PASSWORD', default=''),
+    MAIL_USE_TSL = config('MAIL_USE_TSL', default=True),
+    MAIL_USE_SSL = config('MAIL_USE_SSL', default=False),
 
 
 class ProductionConfig(Config):
