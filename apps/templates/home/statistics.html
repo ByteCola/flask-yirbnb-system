@@ -1,0 +1,77 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Blank Page {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main>
+
+        {# {% include 'includes/preloader.html' %} #}
+
+
+        <!-- Hero -->
+        <section class="section-header  ">
+            <div class="container">
+                <div class="row pt-5 pt-md-0">
+                    {% include 'includes/account_navigation.html' %}
+                    <div class="col-12 col-lg-8">
+                        <div id='calendar'></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'zh-cn',
+                events: [
+                    { // this object will be "parsed" into an Event Object
+                        title: '有客', // a property!
+                        start: '2022-02-17' // a property!
+                    },
+                    { // this object will be "parsed" into an Event Object
+                        title: '有客', // a property!
+                        start: '2022-02-23' // a property!
+                    },
+                    { // this object will be "parsed" into an Event Object
+                        title: '有客', // a property!
+                        start: '2022-02-24' // a property!
+                    },
+                    { // this object will be "parsed" into an Event Object
+                        title: '有客', // a property!
+                        start: '2022-02-25' // a property!
+                    },
+                    { // this object will be "parsed" into an Event Object
+                        title: '有客', // a property!
+                        start: '2022-02-26' // a property!
+                    },
+                    { // this object will be "parsed" into an Event Object
+                        title: '有客', // a property!
+                        start: '2022-02-27' // a property!
+                    },
+                    { // this object will be "parsed" into an Event Object
+                        title: '有客', // a property!
+                        start: '2022-02-28' // a property!
+                    }
+                ]
+            });
+            calendar.render();
+        });
+
+    </script>
+  {% include 'includes/footer.html' %}
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
+
+

@@ -1,0 +1,271 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Blank Page {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main>
+
+        {# {% include 'includes/preloader.html' %} #}
+
+        <!-- Hero -->
+        <section class="section-header pb-9 pb-lg-10 ">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-lg-4 mb-3 mb-lg-0">
+                        <form action="{{ url_for('rooms_blueprint.searchs') }}" method="get" id="search_form">
+                            <input type="hidden" name="page" id="page" value="{{ pagination.page }}"/>
+                            <div class="card shadow mb-3">
+                                <div class="card-body">
+                                    <h3 class="h5 card-title">搜索</h3>
+                                    <div class="d-flex mb-3">
+                                        <div class="col-md-12 me-2">
+                                            <input class="form-control" id="keywords" name="keywords"
+                                                   placeholder="请输入要搜索的内容"
+                                                   type="text"
+                                                   value="{% if keywords %}{{ keywords }}{% endif %}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card shadow mb-3">
+                                <div class="card-body">
+                                    <h3 class="h5 card-title">住宿类型</h3>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="checkbox" name="category"
+                                                       value="all"
+                                                        {% for c in categorys %}
+                                                            {% if c == 'all' %}
+                                                       checked
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                >
+                                                <label class="form-check-label" for="cartCheck6">所有</label>
+                                            </div>
+                                        </div>
+
+                                        {% for category in category_dicts %}
+
+                                            <div class="col-12">
+                                                <div class="form-check mb-1">
+                                                    <input class="form-check-input" type="checkbox" name="category"
+                                                           value="{{ category.code }}"
+                                                            {% for c in categorys %}
+                                                                {% if c == category.code %}
+                                                           checked
+                                                                {% endif %}
+                                                            {% endfor %}
+
+                                                    />
+
+                                                    <label class="form-check-label"
+                                                           for="cartCheck7">{{ category.label }}</label>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card shadow mb-3">
+                                <div class="card-body">
+                                    <h3 class="h5 card-title">床位数</h3>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="checkbox" name="bednum"
+                                                       value="all"
+                                                        {% for c in bednums %}
+                                                            {% if c == 'all' %}
+                                                       checked
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                >
+                                                <label class="form-check-label" >所有</label>
+                                            </div>
+                                        </div>
+
+                                        {% for bed in bed_dicts %}
+                                            <div class="col-12">
+                                                <div class="form-check mb-1">
+                                                    <input class="form-check-input" type="checkbox" name="bednum"
+                                                           value="{{ bed.value }}"
+                                                            {% for c in bednums %}
+                                                                {% if c == bed.value %}
+                                                           checked
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                    />
+                                                    <label class="form-check-label"
+                                                           for="cartCheck7">{{ bed.label }}</label>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="card shadow">
+                                <div class="card-body">
+                                    <h3 class="h5 card-title">价格区间</h3>
+                                    <div class="input-slider-container">
+                                        <div id="input-slider-ecommerce"
+                                             class="input-slider noUi-target noUi-ltr noUi-horizontal"
+                                             data-range-value-min="100" data-range-value-max="500">
+                                            <div class="noUi-base">
+                                                <div class="noUi-connects">
+                                                    <div class="noUi-connect"
+                                                         style="transform: translate(0%, 0px) scale(0.25, 1);"></div>
+                                                </div>
+                                                <div class="noUi-origin"
+                                                     style="transform: translate(-75%, 0px); z-index: 4;">
+                                                    <div class="noUi-handle noUi-handle-lower" data-handle="0"
+                                                         tabindex="0"
+                                                         role="slider" aria-orientation="horizontal" aria-valuemin="0.0"
+                                                         aria-valuemax="100.0" aria-valuenow="25.0"
+                                                         aria-valuetext="200.00">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3 d-none">
+                                            <div class="col-6"><span id="input-slider-value" class="range-slider-value"
+                                                                     data-range-value-low="200"></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mb-3">
+                                        <div class="col-md-6 me-2">
+                                            <label for="priceRangeMin1">最小</label>
+                                            <input class="form-control" id="min_price" name="min_price" placeholder="￥0"
+                                                   type="number" value="{{ min_price }}">
+                                        </div>
+                                        <div class="col-md-6 text-right">
+                                            <label for="priceRangeMax1">最大</label>
+                                            <input class="form-control" id="max_price" name="max_price"
+                                                   placeholder="￥1,000"
+                                                   type="number" value="{{ max_price }}">
+                                        </div>
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="submit" name="search" class="btn btn-tertiary">搜索</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-12 col-md-8 ">
+                        <div class="row">
+                            <div class="col">
+                                <h2 class="h5">搜索到{{ pagination.total_items }}余处房源</h2>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-12 col-md-6 col-lg-12">
+                                {% for room in room_list %}
+                                    <div class="card border-gray-300 mb-4">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col-12 col-lg-6 col-xl-4">
+                                                <a href="{{ url_for('rooms_blueprint.room_detail',id=room.id) }}">
+                                                    <img
+                                                            src="{{ url_for('rooms_blueprint.rooms_photo',filename=room.title_photo) }}"
+                                                            alt="房源图片"
+                                                            class="card-img p-2 rounded-xl">
+                                                </a>
+                                            </div>
+                                            <div class="col-12 col-lg-6 col-xl-8">
+                                                <div class="card-body py-lg-0">
+                                                    <div class="d-flex g-0 align-items-center mb-2">
+                                                        <div class="col text-left">
+                                                            <ul class="list-group mb-0">
+                                                                <li class="list-group-item border-0 small p-0"><span
+                                                                        class="fas fa-medal text-tertiary me-2"></span>房源发布于 {{ room.create_date.strftime("%Y-%m-%d") }}
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+
+                                                    </div>
+                                                    <a href="{{ url_for('rooms_blueprint.room_detail',id=room.id) }}">
+                                                        <h2 class="h6">{{ room.title }}</h2>
+                                                    </a>
+                                                    <div class="col d-flex ps-0">
+
+                                                        {% if room.status == '1' %}
+                                                            <span class="text-success font-small me-3">
+                                                                <i class="fas fa-check-circle me-2"></i>
+                                                                正常入住
+                                                                </span>
+                                                        {% else %}
+                                                            <span class="text-warning font-small me-3">
+                                                                <i class="fa-solid fa-toggle-off"></i>
+                                                                暂停入住
+                                                                </span>
+                                                        {% endif %}
+
+                                                        <span class="text-muted font-small me-3">
+                                                            <span class="fas fa-eye me-2"></span>{{ room.views }}
+                                                        </span>
+                                                        <span
+                                                                class="text-muted font-small me-3">
+                                                            <span
+                                                                    class="far fa-heart me-2"></span>
+                                                            {{ room.loves }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                {% endfor %}
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col">
+                                {% include 'rooms/pagination.html' %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+    {% include 'includes/footer.html' %}
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".page-link").click(function (e) {
+                var $target = $(e.target)
+                //alert($target.data('page'))
+                $("#page").val($target.data('page'));
+                $("#search_form").submit();
+            });
+            $("input[name='category']").click(function (e) {
+                $("#page").val(1);
+                $("#search_form").submit();
+            })
+
+             $("input[name='bednum']").click(function (e) {
+                $("#page").val(1);
+                $("#search_form").submit();
+            })
+        });
+
+    </script>
+{% endblock javascripts %}

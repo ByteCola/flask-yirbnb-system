@@ -1,0 +1,269 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Blank Page {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main>
+
+       {# {% include 'includes/preloader.html' %} #}
+
+
+        <!-- Hero -->
+        <section class="section-header">
+            <div class="container">
+                <div class="row pt-5 pt-md-0">
+
+                    {% include 'includes/account_navigation.html' %}
+
+                    <div class="col-12 col-lg-8">
+                        <form ation="{{ url_for('rooms_blueprint.rooms_add') }}" method="post"
+                              enctype="multipart/form-data"
+                              class="card border-gray-300 p-4 mb-4">
+                            <h1 class="h5 mb-4">编辑房源信息</h1>
+
+                            <div class="mb-4"><label for="firstname">标题</label>
+                                {{ form.title(class="form-control", placeholder="给房源起一个好的标题，更容易吸引人入住哦", class="form-control") }}
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-lg-6">
+                                    <div class="mb-4"><label for="term">城市</label>
+                                        {{ form.city(class="form-control", placeholder="所在城市", class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    <div class="mb-4"><label for="term_amount">可住人数</label>
+                                        {{ form.max_guest(class="form-control", placeholder="可住人数", class="form-control") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-4"><label for="location">具体地址</label>
+                                {{ form.address(class="form-control", placeholder="详细地址", class="form-control") }}
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-lg-6">
+                                    <div class="mb-4"><label for="currency">房源类型</label>
+                                        {{ form.category(class="form-control", placeholder="房源类型", class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    <div class="mb-4"><label for="price">每晚价格（单位，元）</label>
+                                        {{ form.price(class="form-control", placeholder="0.00", class="form-control") }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-lg-4">
+                                    <div class="mb-4"><label for="sqfeet">卧室数</label>
+                                        {{ form.bedroom(class="form-control", placeholder="1", class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-4">
+                                    <div class="mb-4"><label for="people">洗手间数</label>
+                                        {{ form.washroom(class="form-control", placeholder="1", class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-4">
+                                    <div class="mb-4"><label for="sqfeet">床位数</label>
+                                        {{ form.bed(class="form-control", placeholder="2", class="form-control") }}
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="mb-4"><label for="description">房源描述</label>
+                                {{ form.detail(class="form-control", placeholder="为更好的吸引顾客，请具体描述您的房源信息", rows=6, class="form-control") }}
+                            </div>
+
+                            <h2 class="h6">标题图片</h2>
+
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">请上传房源标题图片，用以在搜索列表页面展示</label>
+                                {{ form.title_photo(class="form-control") }}
+                            </div>
+
+                            <h2 class="h6">房源图集</h2>
+
+                            <div class="mb-3">
+                                <input type="text" value="" name="photos" id="photos">
+                                <div class="col-12 col-sm-6 col-xl-12">
+                                    <label for="formFile" class="form-label">请上传房间照片，用以在房源主页显示</label>
+                                    <div class="dropzone my-dropzone border-light border-1 p-3 rounded mb-4">
+                                        <div class="dz-default dz-message">
+                                            <button class="dz-button" type="button">点击或拖拽文件到此处上传</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <small class="text-gray fw-light font-xs d-block mt-2">支持 *.jpg, *.png and *.jpeg
+                                    等图片格式</small>
+                            </div>
+
+
+                            {#                            <h2 class="h6 mt-4">房源图集</h2>#}
+                            {#                            <div class="d-flex justify-content-between align-items-center mt-2">#}
+                            {#                                <div class="mb-3">#}
+                            {#                                    <label for="formFile" class="form-label">请上传房间照片，用以在房源主页显示</label>#}
+                            {#                                    {{ form.photos(class="form-control") }}#}
+                            {#                                </div>#}
+                            {#                            </div>#}
+                            {#                            <small class="text-gray fw-light font-xs d-block mt-2">支持 *.jpg, *.png and *.jpeg#}
+                            {#                                等图片格式</small>#}
+
+                            <h2 class="h6 mt-4">便利设施</h2>
+                            {% for nested in form.facilities %}
+                                {{ nested.facility_code }}{{ nested }}
+                            {% endfor %}
+
+                            <div class="row p-3">
+                                <div class="form-check col-6">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        无线网络
+                                    </label>
+                                </div>
+                                <div class="form-check col-6">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        可以做饭的厨房
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row p-3">
+                                <div class="form-check col-6">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        洗发水
+                                    </label>
+                                </div>
+                                <div class="form-check col-6">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        吹风机
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row p-3">
+                                <div class="form-check col-6">
+                                    <input class="form-check-input" type="checkbox" value="2" name="facilities">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        生活必需品
+                                    </label>
+                                </div>
+                                <div class="form-check col-6">
+                                    <input class="form-check-input" type="checkbox" value="3" name="facilities"
+                                           id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        空调
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row p-3">
+                                <div class="form-check col-6">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        暖气
+                                    </label>
+                                </div>
+                                <div class="form-check col-6">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        电视
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row p-3">
+                                <div class="form-check col-6">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        洗衣机
+                                    </label>
+                                </div>
+                                <div class="form-check col-6">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        烘干机
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row p-3">
+                                <div class="form-check col-6">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        浴缸
+                                    </label>
+                                </div>
+                                <div class="form-check col-6">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        遮光窗帘
+                                    </label>
+                                </div>
+                            </div>
+
+
+                            <div class="mb-4">
+                                <label for="video">房间电话</label>
+                                {{ form.phone(class="form-control", class="form-control") }}
+                            </div>
+                            <div class="mb-4">
+                                <label for="video">入住/退房说明</label>
+                                {{ form.check_tips(class="form-control", class="form-control") }}
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col">
+                                    <button class="btn btn-primary btn-dark mt-2 animate-up-2 text-right"
+                                            type="submit">保存
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    {% include 'includes/footer.html' %}
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script>
+        // Dropzone has been added as a global variable.
+        const dropzone = new Dropzone("div.my-dropzone", {
+            url: "{{ url_for('rs_blueprint.upload') }}",
+            addRemoveLinks: true,
+            dictRemoveFile: '移除'
+        });
+
+        {#let mockFile = {name: "Filename", size: 12345};#}
+        {#dropzone.displayExistingFile(mockFile, 'http://localhost:5000/static/uploads/1.jpg');#}
+
+        dropzone.on("addedfile", file => {
+            console.log("A file has been added");
+        });
+
+        dropzone.on("success", file => {
+            console.log("A file has been added");
+            console.log(file.name)
+
+            console.log(file.xhr.response)
+            let photos = $("#photos").val()
+
+            $("#photos").val(photos + file.xhr.response + ",")
+            //if (file.previewElement) {
+            //    return file.previewElement.classList.add("dz-success");
+            //}
+
+        });
+
+
+    </script>
+{% endblock javascripts %}

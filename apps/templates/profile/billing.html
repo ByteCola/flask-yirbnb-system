@@ -1,0 +1,50 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Blank Page {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main>
+
+        {# {% include 'includes/preloader.html' %} #}
+        <!-- Hero -->
+        <section class="section-header">
+            <div class="container">
+                <div class="row pt-5 pt-md-0">
+                    {% include 'includes/account_navigation.html' %}
+                    <div class="col-12 col-lg-8">
+                        <div class="card border-gray-300 p-0 p-md-4 mb-4">
+                            <div class="card-body">
+                                <h3 class="h5 mb-3">添加您的支付宝收款账户</h3>
+                                  <span class="font-weight-normal">
+                                    {% if msg %}
+                                        {{ msg | safe }}
+                                    {% else %}
+
+                                    {% endif %}
+                                </span>
+                                <form class="form mt-5" autocomplete="off" method="post" action="{{ url_for('profile_blueprint.billing') }}">
+                                    <div class="mb-4">
+                                        <label for="account">支付宝账户</label>
+                                        {{ form.account(placeholder="请输入您的支付宝账户", class="form-control") }}
+                                    </div>
+                                    <div class="form-group"><button type="submit" name="billing" class="btn btn-dark">保存</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+       </main>
+
+    {% include 'includes/footer.html' %}
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

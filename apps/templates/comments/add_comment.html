@@ -1,0 +1,115 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Blank Page {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main>
+
+        {# {% include 'includes/preloader.html' %} #}
+
+        <!-- Hero -->
+        <section class="section-header">
+            <div class="container">
+                <div class="row pt-5 pt-md-0">
+                    {% include 'includes/account_navigation.html' %}
+
+                    <div class="col-12 col-lg-8">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card card-body bg-white border-gray-300 mb-4">
+
+                                    <h2 class="h5 mb-4">行程评价</h2>
+                                    {% if msg %}
+                                        <div class="alert alert-success" role="alert">
+                                         {{ msg | safe }}
+                                        </div>
+                                    {% else %}
+
+                                    {% endif %}
+
+                                    <h2 class="h6 mb-4">{{ rooms.title }}</h2>
+                                    <form method="post"
+                                          action="{{ url_for('comments_blueprint.add_comment',trip_id = trips.id) }}"
+                                          enctype="multipart/form-data">
+                                        {{ form.hidden_tag() }}
+                                        <h2 class="h6 my-4">请对以下项目进行评分</h2>
+                                        <div class="row align-items-center">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="clean">干净卫生</label>
+                                                <div class="input-group">
+                                                    {{ form.clean(class="form-control") }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="truth">如实描述</label>
+                                                {{ form.truth(class="form-control") }}
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row align-items-center">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="communication">沟通顺畅</label>
+                                                <div class="input-group">
+                                                    {{ form.communication(class="form-control") }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="location">位置便利</label>
+                                                {{ form.location(class="form-control") }}
+                                            </div>
+                                        </div>
+                                        <div class="row align-items-center">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="checkin">入住便捷</label>
+                                                <div class="input-group">
+                                                    {{ form.checkin(class="form-control") }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="cost">高性价比</label>
+                                                {{ form.cost(class="form-control") }}
+                                            </div>
+                                        </div>
+
+                                        <h2 class="h5 my-4">评价内容</h2>
+
+                                        <div class="row">
+                                            <div class="col-sm-9 mb-3">
+                                                <div class="mb-3"> {{ form.content(placeholder="请输入您对此次行程的具体评价", class="form-control") }}
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="mt-2">
+                                            <button type="submit" class="btn btn-primary" name="comment">保存</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    {% include 'includes/footer.html' %}
+
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+{% endblock javascripts %}
+
+

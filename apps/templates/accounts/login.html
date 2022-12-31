@@ -1,0 +1,120 @@
+{% extends "layouts/base-fullscreen.html" %}
+
+{% block title %} Sign IN {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main>
+
+        {# {% include 'includes/preloader.html' %} #}
+
+        <header class="header-global">
+            <nav id="navbar-main" aria-label="Primary navigation"
+                 class="navbar navbar-main navbar-expand-lg navbar-theme-primary headroom @@classes">
+                <div class="container position-relative">
+                    <a class="navbar-brand me-lg-5" href="{{ url_for('home_blueprint.index') }}">
+                        <img class="navbar-brand-dark" src="/static/assets/img/brand/light.svg" alt="Logo light">
+                        <img class="navbar-brand-light" src="/static/assets/img/brand/dark.svg" alt="Logo dark">
+                    </a>
+                    <div class="navbar-collapse collapse me-auto" id="navbar_global">
+                        <div class="navbar-collapse-header">
+                            <div class="row">
+                                <div class="col-6 collapse-brand">
+                                    <a href="{{ url_for('home_blueprint.index') }}">
+                                        <img src="/static/assets/img/brand/dark.svg" alt="ByteCola logo">
+                                    </a>
+                                </div>
+                                <div class="col-6 collapse-close">
+                                    <a href="#navbar_global" class="fas fa-times" data-bs-toggle="collapse"
+                                       data-bs-target="#navbar_global" aria-controls="navbar_global"
+                                       aria-expanded="false" title="close" aria-label="Toggle navigation"></a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <!-- Section -->
+        <section class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark"
+                 data-background="/static/assets/img/pages/form-image.jpg">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 d-flex align-items-center justify-content-center">
+                        <div class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500">
+                            <div class="text-center text-md-center mb-4 mt-md-0">
+                                <h1 class="mb-0 h3">登录游彼迎</h1>
+                                <br/>
+                                <span class="font-weight-normal">
+                                    {% if msg %}
+                                        {{ msg | safe }}
+                                    {% else %}
+
+                                    {% endif %}                                  
+                                </span>
+                            </div>
+                            <form method="post"  action="{{ url_for('authentication_blueprint.login') }}" class="mt-4">
+
+                                {{ form.hidden_tag() }}
+
+                                <!-- Form -->
+                                <div class="form-group mb-4">
+                                    <label for="email">用户名</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon1"><span
+                                                class="fas fa-user"></span></span>
+                                        {{ form.username(class="form-control") }}
+                                    </div>
+                                </div>
+                                <!-- End of Form -->
+                                <div class="form-group">
+                                    <!-- Form -->
+                                    <div class="form-group mb-4">
+                                        <label for="password">密码</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon2"><span
+                                                    class="fas fa-unlock-alt"></span></span>
+                                            {{ form.password(class="form-control", type="password") }}
+                                        </div>
+                                    </div>
+                                    <!-- End of Form -->
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <div class="form-check mb-0">
+                                            <input class="form-check-input" type="checkbox" value="" id="remember">
+                                            <label class="form-check-label mb-0" for="remember">
+                                                记住我
+                                            </label>
+                                        </div>
+                                        <div><a href="{{ url_for('authentication_blueprint.forgot_password') }}" class="text-right">忘记密码？</a></div>
+                                    </div>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" name="login" class="btn btn-primary">登录</button>
+                                </div>
+                            </form>
+
+                            <br/>
+
+                            <div class="d-flex justify-content-center align-items-center mt-4">
+                                <span class="fw-normal">
+                                    还没有账号?
+                                     <a href="{{ url_for('authentication_blueprint.register') }}" class="fw-bold text-underline">现在注册</a>
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

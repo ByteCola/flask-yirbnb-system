@@ -1,0 +1,207 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Blank Page {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main>
+
+        {% include 'includes/preloader.html' %}
+
+
+        <!-- Hero -->
+        <section class="section-header">
+            <div class="container">
+                <div class="row pt-5 pt-md-0">
+                    {% include 'includes/account_navigation.html' %}
+                    <div class="col-12 col-lg-8">
+                        <div class="row justify-content-between mb-2">
+                            <a href="{{ url_for('trips_blueprint.landlord_trips') }}"
+                               class="nav-link text-primary btn col-auto "><i class="fa-solid fa-bell me-2"></i>预定订单</a>
+
+                            <a href="{{ url_for('profile_blueprint.landlord') }}"
+                               class="nav-link text-primary btn col-auto ">查看房东认证信息 <i
+                                    class="fa-solid fa-right-to-bracket"></i></a>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-12">
+                                <div class="d-grid"><a href="{{ url_for('rooms_blueprint.rooms_add') }}"
+                                                       class="btn btn-outline-secondary mb-4 py-3"><span
+                                        class="me-2"><span
+                                        class="fas fa-plus"></span></span>发布房源</a></div>
+                            </div>
+
+
+                            <form method="get" id="search_form"
+                                  action="{{ url_for('rooms_blueprint.my_rooms',p=2) }}">
+                                <div class="form-group bg-white shadow-soft rounded-pill mb-4 px-3 py-2">
+                                    <div class="row align-items-center">
+
+                                        <input type="hidden" name="page" id="page" value="1"/>
+                                        <div class="col">
+                                            <div class="input-group input-group-merge shadow-none">
+                                                <div class="input-group-text bg-transparent border-0"><span
+                                                        class="fas fa-search"></span></div>
+                                                <input type="text" name="keywords"
+                                                       class="form-control border-0 form-control-flush shadow-none pb-2"
+                                                       placeholder="输入搜索内容" value="{{ keywords }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit"
+                                                    class="btn btn-block btn-primary rounded-pill">搜索
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </form>
+                            {% for room in room_list %}
+                                <div class="col-12 col-md-6 col-lg-12" id="div_{{ room.id }}">
+                                    <div class="card border-gray-300 mb-4">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col-12 col-lg-6 col-xl-4"><a href="#"><img
+                                                    src="{{ url_for('rooms_blueprint.rooms_photo', filename=room.title_photo) }}"
+                                                    alt="macbook pro"
+                                                    class="card-img p-2 rounded-xl"></a></div>
+                                            <div class="col-12 col-lg-6 col-xl-8">
+                                                <div class="card-body py-lg-0">
+                                                    <div class="d-flex g-0 align-items-center mb-2">
+                                                        <div class="col text-left">
+                                                            <ul class="list-group mb-0">
+                                                                <li class="list-group-item border-0 small p-0"><span
+                                                                        class="fas fa-medal text-tertiary me-2"></span>发布于{{ room.create_date.strftime("%Y-%m-%d") }}
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col text-right">
+                                                            <div class="btn-group">
+                                                                <button
+                                                                        class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
+                                                                        data-bs-toggle="dropdown" aria-haspopup="true"
+                                                                        aria-expanded="false"><span
+                                                                        class="icon icon-sm"><span
+                                                                        class="fas fa-ellipsis-h icon-secondary"></span>
+                                                                </span><span class="sr-only">Toggle
+                                                                    Dropdown</span></button>
+                                                                <div class="dropdown-menu py-0"><a
+                                                                        class="dropdown-item rounded-top"
+                                                                        href="{{ url_for('rooms_blueprint.edit', id=room.id) }}"><span
+                                                                        class="fas fa-edit me-2"></span>编辑</a> <a
+                                                                        href="{{ url_for('trips_blueprint.room_trips', room_id=room.id) }}"
+                                                                        class="dropdown-item"><span
+                                                                        class="fas fa-chart-line me-2"></span>入住情况</a>
+                                                                    <a class="dropdown-item rounded-bottom"
+                                                                       href="{{ url_for('rooms_blueprint.status_update', id=room.id) }}">
+
+                                                                        {% if room.status == '1' %}
+                                                                            <i class="fa-solid fa-toggle-on"></i>
+                                                                            暂定入住
+                                                                        {% else %}
+                                                                            <i class="fa-solid fa-toggle-off"></i>
+                                                                            开启入住
+                                                                        {% endif %}
+                                                                    </a>
+                                                                    <a class="dropdown-item rounded-bottom"
+                                                                       href="javascript:void(0)"
+                                                                       onclick="deleteRoom('{{ url_for('rooms_blueprint.delete', id=room.id) }}',{{ room.id }})">
+                                                                        <i class="fa-solid fa-circle-minus"></i>
+                                                                        移除房源
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <a href="{{ url_for('rooms_blueprint.room_detail', id=room.id) }}"
+                                                       target="_blank">
+                                                        <h2 class="h5">{{ room.title }}</h2>
+                                                    </a>
+                                                    <div class="col d-flex ps-0 mt-4">
+
+                                                        {% if room.status == '1' %}
+                                                            <span class="text-success font-small me-3 fw-bold">
+                                                            <i class="fa-solid fa-toggle-on"></i>
+                                                            正常入住
+                                                             </span>
+                                                        {% else %}
+                                                            <span class="text-warning font-small me-3  fw-bold">
+                                                            <i class="fa-solid fa-toggle-off"></i>
+                                                            暂停入住
+                                                              </span>
+                                                        {% endif %}
+
+                                                        <span
+                                                                class="text-muted font-small me-3 fw-bold"><span
+                                                                class="fas fa-eye me-2"></span>{{ room.views or 0 }}</span>
+                                                        <span
+                                                                class="text-muted font-small me-3 fw-bold "><span
+                                                                class="far fa-heart me-2"></span>{{ room.loves or 0 }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+
+
+                            <div class="row">
+                                <div class="col">
+                                    {% include 'rooms/pagination.html' %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+    </main>
+
+    {% include 'includes/footer.html' %}
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".page-link").click(function (e) {
+                var $target = $(e.target)
+                $("#page").val($target.data('page'));
+                $("#search_form").submit();
+            });
+        });
+
+        function updateStatus(id, status) {
+            console.log(id + "########" + status)
+            if (status == '1') {
+
+            }
+        }
+
+        function deleteRoom(url,id) {
+            var r = confirm("确认删除该房源吗？");
+            if (r) {
+
+                $.ajax({
+                    url: url,
+                    type: "delete",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result)
+                        if (result.valid == 'success') {
+                            $('#div_'+id).fadeOut()
+                        }else{
+                            alert("删除失败")
+                        }
+                    }
+                });
+            }
+        }
+
+
+    </script>
+{% endblock javascripts %}

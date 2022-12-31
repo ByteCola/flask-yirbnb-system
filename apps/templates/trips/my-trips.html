@@ -1,0 +1,175 @@
+{% extends "layouts/base.html" %}
+{% block ccc %}
+    navbar-light navbar-theme-secondary
+{% endblock %}
+
+{% block title %} 我的出行 {% endblock %}
+
+{% block test %}testestetstststst{% endblock test %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main>
+
+        {# {% include 'includes/preloader.html' %} #}
+
+        <!-- Hero -->
+        <section class="section-header  ">
+            <div class="container">
+                <div class="row pt-5 pt-md-0">
+                    {% include 'includes/account_navigation.html' %}
+
+                    <div class="col-12 col-lg-8">
+                        <ul class="nav">
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold text-success active " aria-current="page"
+                                   href="#">全部订单</a>
+                            </li>
+                            {#                            <li class="nav-item">#}
+                            {#                                <a class="nav-link fw-bold" href="#">未出行</a>#}
+                            {#                            </li>#}
+                            {#                            <li class="nav-item">#}
+                            {#                                <a class="nav-link fw-bold" href="#">已出行</a>#}
+                            {#                            </li>#}
+                        </ul>
+
+                        {% if data_list %}
+                            <div class="row">
+                                <div class="col-12 text-center pt-4 text-dark">
+                                    {% for trip in data_list %}
+
+                                        <div class="card shadow p-4 mb-2">
+                                            <div class="col text-left">
+                                                <ul class="list-group mb-0">
+                                                    <li class="list-group-item border-0 font-small p-0">
+                                                        <i class="fas fa-calendar-alt pe-2"></i>{{ trip.order_date.strftime("%Y年%m月%d日 %H:%M") }}下单
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-3"><a href="#"><img
+                                                        src="{{ url_for('rooms_blueprint.rooms_photo', filename=trip.room_title_image) }}"
+                                                        alt="apple watch series"></a></div>
+                                                <div class="col">
+                                                    <div class="d-flex mb-2 fw-bold text-left">
+                                                        <a class="h6"
+                                                           href="{{ url_for('rooms_blueprint.room_detail',id=trip.room_id) }}">{{ trip.room_title }}</a>
+                                                    </div>
+
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="d-flex flex-column text-left font-small">
+                                                            <span>￥{{ trip.room_price }}/每晚</span>
+                                                            <span>{{ trip.start_date.strftime('%m月%d日') }} 到  {{ trip.end_date.strftime("%m月%d日") }}共{{ trip.night }}晚</span>
+                                                        </div>
+
+                                                        <div class="ms-auto">
+                                                            <a class="btn-link text-dark h6 fw-bold" href="#">
+                                                                <i class="fas fa-comments-alt-dollar"></i>总计
+                                                                ￥{{ trip.order_total_fees }}
+                                                            </a></div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            {% if trip.pay_status == 'paid' %}
+                                                <div class="col text-right">
+                                                    <div class="btn-group">
+                                                        <a class="btn btn-link text-dark  m-0 p-0"
+                                                           href="{{ url_for('comments_blueprint.add_comment', trip_id=trip.id) }}">
+                                                        <span class="icon icon-sm fw-bold text-success">
+                                                            <i class="fas fa-comment-alt"></i>&nbsp;&nbsp;评价
+                                                        </span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            {% elif trip.pay_status == 'refund' %}
+                                                 <div class="col text-right">
+                                                    <div class="btn-group">
+
+                                                        <span class="icon icon-sm fw-bold text-danger">
+                                                            <i class="fas fa-comment-alt"></i>&nbsp;&nbsp;已退款
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            {% else %}
+                                                <div class="col text-right">
+                                                    <div class="btn-group">
+                                                        <a class="btn btn-link text-dark  m-0 p-0"
+                                                           href="javascript:showPayModal({{ trip.id }})">
+                                                        <span class="icon icon-sm fw-bold text-success">
+                                                            <i class="fab fa-alipay"></i>&nbsp;&nbsp;去付款
+                                                        </span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="row">
+                                <div class="col-12 text-center pt-6 text-dark d-flex align-items-center justify-content-center">
+                                    <div><a href="{{ url_for('home_blueprint.index') }}"><img class="img-fluid w-50"
+                                                                                              src="/static/assets/img/illustrations/404.svg"
+                                                                                              alt="girl illustration"></a>
+                                        <h1 class="mt-4">没有订单数据</h1>
+                                        <a class="btn btn-primary animate-hover mt-4"
+                                           href="{{ url_for('home_blueprint.index') }}">搜索房源<span
+                                                class="fas fa-chevron-right me-3 ps-2 animate-right-3"></span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 付款模拟弹窗 -->
+    <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog" aria-labelledby="modal-notification"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content bg-success text-white">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close bg-gray-500" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="py-3 text-center">
+                        <span class="modal-icon display-1-lg"><span class="far fa-envelope-open"></span></span>
+                        <h2 class="h4 modal-title my-3">模拟支付流程</h2>
+                        <p class="px-lg-5">这里会跳转到支付宝的支付沙箱页面，支付时需要使用沙箱账号进行支付。可以点击付款按钮，进入支付宝支付页面。</p>
+                    </div>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <a href="{{ url_for('book_blueprint.book_pay',id='') }}" class="btn btn-sm btn-white"
+                       id="pay_finish">去支付</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    {% include 'includes/footer.html' %}
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script>
+        function showPayModal(id) {
+            let href = $('#pay_finish').attr('href')
+            $("#pay_finish").attr('href', href + id)
+            $("#modal-notification").modal('show')
+        }
+    </script>
+{% endblock javascripts %}

@@ -1,0 +1,56 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Blank Page {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main>
+
+        {# {% include 'includes/preloader.html' %} #}
+
+        <!-- Hero -->
+        <section class="section-header">
+            <div class="container">
+                <div class="row pt-5 pt-md-0">
+                     {% include 'includes/account_navigation.html' %}
+                    <div class="col-12 col-lg-8">
+                        <div class="card border-gray-300 p-0 p-md-4 mb-4">
+                            <div class="card-body">
+                                <h3 class="h5 mb-3">修改密码</h3>
+                                 <span class="font-weight-normal">
+                                    {% if msg %}
+                                        {{ msg | safe }}
+                                    {% else %}
+
+                                    {% endif %}
+                                </span>
+                                <form class="form mt-5" autocomplete="off" action="{{ url_for('authentication_blueprint.edit_password') }}" method="post">
+                                    <div class="mb-4"><label for="source_password">当前密码</label> <input
+                                            type="password" class="form-control" id="source_password" name="source_password" required="">
+                                    </div>
+                                    <div class="mb-4"><label for="new_password">新密码</label> <input
+                                            type="password" class="form-control" id="new_password" name="new_password" required="">
+                                        <span class="form-text small text-muted">建议新密码设置长度为8-20个字符,
+                                            <em>不能</em> 空格.</span></div>
+                                    <div class="mb-4"><label for="confirm_password">确认新密码</label> <input
+                                            type="password" class="form-control" id="confirm_password" name="confirm_password"
+                                            required=""> <span class="form-text small text-muted">请再次输入您的新密码</span></div>
+                                    <div class="form-group"><button type="submit" class="btn btn-dark" name="edit_password">保存</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% include 'includes/footer.html' %}
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

@@ -1,0 +1,158 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Blank Page {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main>
+
+        {# {% include 'includes/preloader.html' %} #}
+
+        <!-- Hero -->
+        <section class="section-header">
+            <div class="container">
+                <div class="row pt-5 pt-md-0">
+                    {% include 'includes/account_navigation.html' %}
+
+                    <div class="col-12 col-lg-8">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card card-body bg-white border-gray-300 mb-4">
+                                    <h2 class="h5 mb-4">个人信息</h2>
+                                    <form method="post" action="{{ url_for('profile_blueprint.settings') }}"
+                                          enctype="multipart/form-data">
+                                        {{ form.hidden_tag() }}
+
+                                        <div class=" bg-white border-gray-300 mb-4">
+                                            <div class="row align-items-center">
+                                                {% if current_user.profiles %}
+                                                    {% if current_user.profiles[0].photo %}
+
+                                                        <div class="col-lg-1 mb-2 mb-lg-0">
+                                                            <div class="avatar-lg">
+                                                                <img class="rounded-circle"
+                                                                                        src="{{ url_for('profile_blueprint.profile_photo', filename=current_user.profiles[0].photo) }}"
+                                                                                        alt="change avatar">
+                                                            </div>
+                                                        </div>
+
+                                                    {% else %}
+                                                        <div class="col-lg-1 mb-2 mb-lg-0">
+                                                            <div class="avatar-lg"><img class="rounded-circle"
+                                                                                        src="{{ url_for('profile_blueprint.profile_photo', filename='default-user.png') }}"
+                                                                                        alt="change avatar"></div>
+                                                        </div>
+
+                                                    {% endif %}
+
+                                                {% else %}
+                                                    <div class="col-lg-1 mb-2 mb-lg-0">
+                                                        <div class="avatar-lg"><img class="rounded-circle"
+                                                                                    src="{{ url_for('profile_blueprint.profile_photo', filename='default-user.png') }}"
+                                                                                    alt="change avatar"></div>
+                                                    </div>
+                                                {% endif %}
+
+                                                <div class="col-lg-5">
+                                                    <div class="h6 mb-0 ms-lg-3">你的头像</div>
+                                                    <small
+                                                            class="text-gray ms-lg-3">支持JPG, GIF or
+                                                        PNG等格式，建议800kb以内</small>
+                                                </div>
+                                                <div class="col-lg-5">
+                                                    <div class="mb-3"><label for="formFile"
+                                                                             class="form-label">点击上传头像照片</label> {{ form.photo(placeholder="Upload Photo", class="form-control") }}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 mb-3">
+                                                <div class="mb-3"><label for="full_name">姓名</label>
+                                                    {{ form.fullname(placeholder="请输入您的姓名", class="form-control") }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row align-items-center">
+                                            <div class="col-md-6 mb-3">
+                                                <div class="mb-3"><label for="birthday">生日</label>
+                                                    <div class="input-group">
+                                                        {{ form.birthday(placeholder="yyyy-mm-dd", class="form-control", **{"data-datepicker": ""}) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3"><label
+                                                    for="gender">性别</label> {{ form.gender(class="form-control") }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <div class="mb-3"><label for="email">邮箱</label> <input
+                                                        class="form-control" id="email" type="email"
+                                                        placeholder="name@company.com" value="{{ current_user.email }}"
+                                                        readonly></div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <div class="mb-3"><label
+                                                        for="phone">手机</label> {{ form.phone(class="form-control", placeholder="+86-18531201452") }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h2 class="h5 my-4">地址</h2>
+
+                                        <div class="row">
+
+                                            <div class="col-sm-4 mb-3"><label
+                                                    for="country2">国家</label> {{ form.country(placeholder="国家", class="form-control") }}
+                                            </div>
+                                            <div class="col-sm-4 mb-3">
+                                                <div class="mb-3"><label
+                                                        for="city">城市</label> {{ form.city(placeholder="城市", class="form-control") }}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="mb-3"><label
+                                                        for="zip">邮编</label> {{ form.zipcode(placeholder="邮编", class="form-control") }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-9 mb-3">
+                                                <div class="mb-3"><label
+                                                        for="address">具体地址</label> {{ form.address(placeholder="请输入您的具体联系地址", class="form-control") }}
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="mt-2">
+                                            <button type="submit" class="btn btn-primary" name="profile">保存</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    {% include 'includes/footer.html' %}
+
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+{% endblock javascripts %}
+
+

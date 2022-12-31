@@ -1,0 +1,150 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Blank Page {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+    <main>
+        <section class="section ">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-lg-10">
+                        <div class="d-flex flex-column flex-lg-row align-items-center justify-content-between mb-4">
+                            <a href="{{ url_for('trips_blueprint.landlord_trips') }}" class="mb-3 mb-lg-0">
+                            <span class="icon icon-xs">
+                                <span class="fas fa-chevron-left me-2"></span>
+                            </span>
+                                返回预定订单
+                            </a>
+                             {% if trip.pay_status == 'paid' %}
+                            <div>
+
+                                <button class="btn btn-warning text-gray me-2" onclick="refund('{{ url_for('trips_blueprint.trip_refund',id=trip.id) }}')">
+                                    谢绝入住并退款
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                </button>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="card border-gray-300 p-4 p-md-5 position-relative">
+
+                            <div class="mb-6 d-flex align-items-center justify-content-center">
+
+                                {% if trip.pay_status == 'paid' %}
+                                     <h2 class="h1 mb-0 text-success">订单已支付</h2>
+                                {% elif trip.pay_status == 'refund'%}
+                                     <h2 class="h1 mb-0 text-warning">订单已退款</h2>
+                                {% else %}
+                                     <h2 class="h1 mb-0 text-danger">订单未支付</h2>
+                                {% endif %}
+                            </div>
+                            <div class="row justify-content-between mb-4 mb-md-5">
+                                <div class="col-sm">
+                                    <h5>预定详情</h5>
+                                    <div>
+                                        <ul class="list-group simple-list">
+                                            <li class="list-group-item font-weight-norma border-0 ps-0 py-1">
+                                                {{ trip.room.title }}
+                                            </li>
+                                            <li class="list-group-item font-weight-norma border-0 ps-0 py-1">
+                                                &yen;{{ trip.room.price }}/每晚
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row border-top">
+                                <div class="col-6">
+                                    <div class="d-flex justify-content-end text-right mb-4 py-4 ">
+                                        <dl class="row text-sm-left">
+                                            <dt class="col-6"><strong>订单号:</strong></dt>
+                                            <dd class="col-6">{{ trip.order_no }}</dd>
+                                            <dt class="col-6"><strong>订单日期:</strong></dt>
+                                            <dd class="col-6">{{ trip.order_date.strftime("%Y年%m月%d日 %H:%M") }}</dd>
+                                            <dt class="col-6"><strong>预定时间:</strong></dt>
+                                            <dd class="col-6">{{ trip.start_date.strftime('%m月%d日') }}
+                                                到 {{ trip.end_date.strftime("%m月%d日") }}共{{ trip.night }}晚
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+
+                                 <div class="col-6">
+                                    <div class="d-flex justify-content-end text-right mb-4 py-4 ">
+                                        <dl class="row text-sm-right">
+                                            <dt class="col-6"><strong>预定人:</strong></dt>
+                                            <dd class="col-6">{{ trip.check_person }}</dd>
+                                            <dt class="col-6"><strong>登记手机号:</strong></dt>
+                                            <dd class="col-6">{{ trip.check_phone  }}</dd>
+                                            <dt class="col-6"><strong>总金额:</strong></dt>
+                                            <dd class="col-6">&yen;{{ trip.order_total_fees }}
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+{#                                <div class="col-6">#}
+{#                                    <div class="d-flex justify-content-end text-right mb-4 py-4 border-bottom">#}
+{#                                        <div class="mt-4">#}
+{#                                            <table class="table table-clear">#}
+{#                                                <tbody>#}
+{#                                                <tr>#}
+{#                                                    <td class="left"><strong>预定人</strong></td>#}
+{#                                                    <td class="right">{{ trip.check_person }}</td>#}
+{#                                                </tr>#}
+{#                                                <tr>#}
+{#                                                    <td class="left"><strong>预定手机号</strong></td>#}
+{#                                                    <td class="right">{{ trip.check_phone }}</td>#}
+{#                                                </tr>#}
+{#                                                <tr>#}
+{#                                                    <td class="left"><strong>总金额</strong></td>#}
+{#                                                    <td class="right">&yen;{{ trip.order_total_fees }}</td>#}
+{#                                                </tr>#}
+{##}
+{#                                                </tbody>#}
+{#                                            </table>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <h6>预定登记手机号:</h6><span>{{ trip.check_phone }}</span>#}
+{#                                </div>#}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    {% include 'includes/footer.html' %}
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+    <script>
+        function refund(url) {
+            var r = confirm("请确认是否退款至预定用户？");
+            if (r) {
+
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result)
+                        if (result.valid == 'success') {
+                            location.reload()
+                        }else{
+                            alert(result.message)
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+
+{% endblock javascripts %}

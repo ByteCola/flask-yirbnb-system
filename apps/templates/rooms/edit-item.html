@@ -1,0 +1,232 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Blank Page {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main>
+
+        {# {% include 'includes/preloader.html' %} #}
+
+
+        <!-- Hero -->
+        <section class="section-header">
+            <div class="container">
+                <div class="row pt-5 pt-md-0">
+
+                    {% include 'includes/account_navigation.html' %}
+
+                    <div class="col-12 col-lg-8">
+
+                        <form ation="{{ url_for('rooms_blueprint.edit', id=data.id) }}" method="post"
+                              enctype="multipart/form-data"
+                              class="card border-gray-300 p-4 mb-4">
+                            <div>
+                                <h1 class="h5 mb-4">编辑房源信息</h1>
+
+                                <div class="mb-4"><label for="firstname">标题</label>
+                                    {{ form.title(class="form-control", placeholder="给房源起一个好的标题，更容易吸引人入住哦", class="form-control") }}
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 col-lg-6">
+                                        <div class="mb-4"><label for="term">城市</label>
+                                            {{ form.city(class="form-control", placeholder="所在城市", class="form-control") }}
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <div class="mb-4"><label for="term_amount">可住人数</label>
+                                            {{ form.max_guest(class="form-control", placeholder="可住人数", class="form-control") }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4"><label for="location">具体地址</label>
+                                    {{ form.address(class="form-control", placeholder="详细地址", class="form-control") }}
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 col-lg-6">
+                                        <div class="mb-4"><label for="currency">房源类型</label>
+                                            {{ form.category(class="form-control", placeholder="房源类型", class="form-control") }}
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <div class="mb-4"><label for="price">每晚价格（单位，元）</label>
+                                            {{ form.price(class="form-control", placeholder="0.00", class="form-control") }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12 col-lg-4">
+                                        <div class="mb-4"><label for="sqfeet">卧室数</label>
+                                            {{ form.bedroom(class="form-control", placeholder="1", class="form-control") }}
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-4">
+                                        <div class="mb-4"><label for="people">洗手间数</label>
+                                            {{ form.washroom(class="form-control", placeholder="1", class="form-control") }}
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-4">
+                                        <div class="mb-4"><label for="sqfeet">床位数</label>
+                                            {{ form.bed(class="form-control", placeholder="2", class="form-control") }}
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="mb-4"><label for="description">房源描述</label>
+                                    {{ form.detail(class="form-control", placeholder="为更好的吸引顾客，请具体描述您的房源信息", rows=6, class="form-control") }}
+                                </div>
+
+                                <h2 class="h6">标题图片</h2>
+
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <div class="profile-image-small fmxw-100 me-4">
+                                        {% if data.title_photo %}
+                                            <img class="rounded"
+                                                 src="{{ url_for('rooms_blueprint.rooms_photo', filename=data.title_photo) }}"
+                                                 alt="Office">
+                                        {% else %}
+                                            <div class="col-lg-1 mb-2 mb-lg-0">
+                                                <img class="rounded"
+                                                     src="{{ url_for('rooms_blueprint.rooms_photo', filename='default-room-image.png') }}"
+                                                     alt="change photo"></div>
+                                            </div>
+
+                                        {% endif %}
+                                </div>
+                                <div class="mb-3">
+                                    <label for="formFile" class="form-label">请上传房源标题图片，用以在搜索列表页面展示</label>
+                                    {{ form.title_photo(class="form-control", class="form-control") }}
+                                </div>
+                            </div>
+                            <small class="text-gray fw-light font-xs d-block mt-2">支持 *.jpg, *.png and *.jpeg
+                                等图片格式</small>
+
+                            <h2 class="h6 mt-4">房源图集</h2>
+                            <div class="mb-3">
+                                <input type="hidden" value="{{ data.photos }}" name="photos" id="photos">
+                                <div class="col-12 col-sm-6 col-xl-12">
+                                    <label for="formFile" class="form-label">请上传房间照片，用以在房源主页显示</label>
+                                    <div class="dropzone my-dropzone border-light border-1 p-3 rounded mb-4">
+                                        <div class="dz-default dz-message">
+                                            <button class="dz-button" type="button">点击或拖拽文件到此处上传</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <small class="text-gray fw-light font-xs d-block mt-2">支持 *.jpg, *.png and *.jpeg
+                                    等图片格式</small>
+                            </div>
+
+                            {#                            <h2 class="h6 mt-4">房源图集</h2>#}
+                            {#                            <div class="d-flex justify-content-between align-items-center mt-2">#}
+                            {#                                <div class="mb-3">#}
+                            {#                                    <label for="formFile" class="form-label">请上传房间照片，用以在房源主页显示</label>#}
+                            {#                                    {{ form.photos(class="form-control", class="form-control") }}#}
+                            {#                                </div>#}
+                            {#                            </div>#}
+                            {#                            <small class="text-gray fw-light font-xs d-block mt-2">支持 *.jpg, *.png and *.jpeg#}
+                            {#                                等图片格式</small>#}
+                            {#                            <div class="d-flex flex-wrap mt-4">#}
+                            {#                                {% for photo in data.photos.split(',') %}#}
+                            {#                                    {% if not loop.last %}#}
+                            {#                                        <div class="profile-image-small fmxw-100 me-3 mb-3">#}
+                            {#                                            <img class="rounded"#}
+                            {#                                                 src="{{ url_for('rooms_blueprint.rooms_photo', filename=photo) }}"#}
+                            {#                                                 alt="Office">#}
+                            {#                                        </div>#}
+                            {#                                    {% endif %}#}
+                            {#                                {% endfor %}#}
+                            {#                            </div>#}
+                            <h2 class="h6 mt-4">便利设施</h2>
+                            <div class="row p-3">
+                                {% for fd in facility_dicts %}
+                                    <div class="form-check col-6 mb-2">
+                                        <input class="form-check-input" type="checkbox" value="{{ fd.code }}"
+                                               name="facilities"
+                                                {% for f in data.facilities %}
+                                                    {% if f.facility_code == fd.code %}
+                                               checked
+                                                    {% endif %}
+                                                {% endfor %}
+                                        >
+                                        <label class="form-check-label" for="facilities">
+                                            {{ fd.label }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="mb-4">
+                                <label for="video">房间电话</label>
+                                {{ form.phone(class="form-control", class="form-control") }}
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <button class="btn btn-primary btn-dark mt-2 animate-up-2 text-right"
+                                            type="submit">保存
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    {% include 'includes/footer.html' %}
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+    <script>
+        // Dropzone has been added as a global variable.
+        const dropzone = new Dropzone("div.my-dropzone", {
+            url: "{{ url_for('rs_blueprint.upload') }}",
+            addRemoveLinks: true,
+            dictRemoveFile: '移除'
+        });
+
+        console.log(dropzone)
+
+        {% for photo in data.photos.split(',') %}
+            {% if not loop.last %}
+                dropzone.displayExistingFile({name: "{{ photo }}"}, '{{ url_for('rooms_blueprint.rooms_photo', filename=photo) }}');
+            {% endif %}
+        {% endfor %}
+
+        dropzone.on('removedfile', file => {
+            console.log("A file has been deleted");
+            console.log(file.name)
+            let files_array = []
+            $("span[data-dz-name]").each(function () {
+                files_array.push($(this).text())
+            });
+            console.log(files_array.join(','))
+            $("#photos").val(files_array.join(',') + ',')
+        })
+
+
+        dropzone.on("success", file => {
+            console.log("A file has been added");
+            console.log(file.name)
+
+            let files_array = []
+            $("span[data-dz-name]").each(function () {
+                if ($(this).text() == file.name) $(this).text(file.xhr.response)
+                files_array.push($(this).text())
+            });
+
+            $("#photos").val(files_array.join(',') + ',')
+            //if (file.previewElement) {
+            //    return file.previewElement.classList.add("dz-success");
+            //}
+
+        });
+    </script>
+
+{% endblock javascripts %}

@@ -1,0 +1,539 @@
+{% extends "layouts/base_dark.html" %}
+
+{% block title %} {{ data.title }} {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main>
+
+        {# {% include 'includes/preloader.html' %} #}
+        <!-- Hero -->
+        <section class="bg-primary section-header text-white">
+            <div class="container-fluid p-0">
+
+                <div class="row d-flex flex-end m-0 col-12 justify-content-end ">
+                    <button onclick="like('{{ url_for('rooms_blueprint.like',id=data.id) }}')" class="col-auto position-absolute fw-bold mt-4 me-4 btn btn-white py-2 px-3  border-1 border-dark" id="like">
+                        {% if like == '1' %}
+                             <i class="fa-solid fa-heart me-2 "></i><span>取消喜欢</span>
+                        {% else %}
+                             <i class="fa-regular fa-heart me-2 "></i><span>喜欢</span>
+                        {% endif %}
+
+                    </button>
+                    <div class=" col-12 col-md-6 p-0 border border-2 border-black"
+                         style="background: url('{{ url_for('rooms_blueprint.rooms_photo',filename=data.title_photo) }}') no-repeat center ;height:480px">
+
+                    </div>
+                    <div class="col-6 d-md-block d-none">
+                        <div class="row">
+                            <div class="col-6 p-0 border border-2 border-black"
+                                 style="background: url('{{ url_for('rooms_blueprint.rooms_photo',filename=data.photos.split(',')[0]) }}') no-repeat center;height:240px">
+
+                            </div>
+
+                            <div class="col-6 p-0 border border-2 border-black"
+                                 style="background: url('{{ url_for('rooms_blueprint.rooms_photo',filename=data.photos.split(',')[1]) }}') no-repeat center ;height:240px">
+
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-6 p-0 border border-2 border-black"
+                                 style="background: url('{{ url_for('rooms_blueprint.rooms_photo',filename=data.photos.split(',')[2]) }}') no-repeat center;height:240px">
+
+                            </div>
+
+                            <div class="col-6 p-0 border border-2 border-black"
+                                 style="background: url('{{ url_for('rooms_blueprint.rooms_photo',filename=data.photos.split(',')[3]) }}') no-repeat center ;height:240px">
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="container mt-2 ">
+                <div class="row">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link fw-bold active border-bottom" aria-current="page" href="#detail">详情</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-bold" href="#comments">评价</a>
+                        </li>
+                        {#                        <li class="nav-item">#}
+                        {#                            <a class="nav-link fw-bold" href="#order_date">可订日期</a>#}
+                        {#                        </li>#}
+                        {#                        <li class="nav-item">#}
+                        {#                            <a class="nav-link fw-bold " href="#notice">须知</a>#}
+                        {#                        </li>#}
+                        {#                        <li class="nav-item ">#}
+                        {#                            <a class="nav-link fw-bold disabled" href="#master">房东</a>#}
+                        {#                        </li>#}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="container d-flex">
+                <div class="col-12 col-xl-8 justify-content-start mt-4">
+                    <div class="col-12 " id="detail">
+                        <h1 class="display-4 mb-3 mt-2">{{ data.title }}</h1>
+
+                    </div>
+                    <div class="col d-flex ps-0">
+                        <span class="text-success font-small me-3 "
+                              style="font-size:.5rem">{{ "%.1f" | format( score.avg_score ) }}分 · {{ comments_num }}条评论</span>
+                        {% if data.tags %}
+                            {% for tag in data.tags.split(',') %}
+                                <span class="text-muted font-small me-3 " style="font-size:.5rem">{{ tag }}</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div class="col d-flex border-top border-gray mt-4 pt-3  justify-content-center">
+                        <img src="{{ url_for('profile_blueprint.profile_photo', filename=data.user.profiles[0].photo) }}"
+                             class="rounded-circle img-thumbnail image-md border-secondary p-1" alt="Avatar">
+                        <div class="col justify-content-center mx-2 p-3">
+                            <h6 class="me-5">房东：{{ data.user.profiles[0].fullname }}</h6>
+                            <span>{{ landlord_comments_num }}条评价 已验证身份</span>
+                        </div>
+
+                    </div>
+                    <div class="col bg-secondary p-2 rounded-2">
+                        <p class="font-small">
+                            {{ data.detail }}
+                        </p>
+                        {#<a class="font-small text-success fw-bold" href="#">查看更多</a>#}
+                    </div>
+
+                    <div class="row col mt-4 pt-3">
+
+                        <p class="col-12 row">
+                            <span class="fw-bold  col-4 ">房源地址</span><span class="col-8">{{ data.address }}</span>
+                        </p>
+                        <p class="col-12 row">
+                            <span class="fw-bold  col-4 ">入住/退房</span><span class="col-8">{{ data.check_tips }}</span>
+                        </p>
+
+                    </div>
+
+
+
+
+                    <div class="row col border-top border-secondary mt-2 pt-4">
+                        <div class="mb-4">
+                            <span class="fw-bold text-left">便利设施</span>
+                        </div>
+
+                        {% for f in data.facilities %}
+                            {% for fd in facility_dicts %}
+                                {% if f.facility_code == fd.code %}
+                                    <div class="col-2 d-flex flex-column align-items-center mt-2 text-center">
+                                        <i class="{{ fd.icon }} fs-3"></i>
+                                        <span class="mt-3"> {{ fd.label }}</span>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+
+
+                    </div>
+                    <div class="row border-top border-secondary mt-4 pt-4">
+                        <h1 class=" display-5">房客评价</h1>
+                        <div class="row">
+                            <p class="mt-4 ">
+                                <i class="fas fa-star text-success "></i> {{ "%.1f" | format( score.avg_score) }} 分
+                                <span class="mx-2">{{ comments_num }}条评价</span>
+                            </p>
+                            <div class="d-flex flex-column flex-lg-wrap flex-lg-row  ">
+                                {#                                <div class="row col-12 col-lg-6 py-2">#}
+                                {#                                    <span class="col-6">如实描述</span>#}
+                                {#                                    <span class="col-6 flex-end  text-end">#}
+                                {#                                        <i class="fas fa-star"></i>#}
+                                {#                                        <i class="fas fa-star"></i>#}
+                                {#                                        <i class="fas fa-star"></i>#}
+                                {#                                        <i class="fas fa-star"></i>#}
+                                {#                                        <i class="fas fa-star"></i>#}
+                                {#                                    </span>#}
+                                {#                                </div>#}
+                                <div class="row col-12 col-lg-6 py-2">
+                                    <span class="col-6">如实描述</span>
+                                    <span class="col-6 flex-end  text-end">
+                                        {{ "%.1f" | format( score.clean ) }}
+                                    </span>
+                                </div>
+                                <div class="row col-12 col-lg-6 py-2 ms-lg-4">
+                                    <span class="col-6">位置便利</span>
+                                    <span class="col-6 flex-end  text-end">
+                                         {{ "%.1f" | format(  score.location) }}
+                                    </span>
+                                </div>
+                                <div class="row col-12 col-lg-6 py-2 ">
+                                    <span class="col-6">沟通顺畅</span>
+                                    <span class="col-6 flex-end  text-end">
+                                        {{ "%.1f" | format( score.communication ) }}
+                                    </span>
+                                </div>
+                                <div class="row col-12 col-lg-6 py-2 ms-lg-4">
+                                    <span class="col-6">入住便捷</span>
+                                    <span class="col-6 flex-end  text-end">
+                                        {{ "%.1f" | format( score.checkin) }}
+                                    </span>
+                                </div>
+                                <div class="row col-12 col-lg-6 py-2 ">
+                                    <span class="col-6">干净卫生</span>
+                                    <span class="col-6 flex-end  text-end">
+                                        {{ "%.1f" | format( score.clean) }}
+                                    </span>
+                                </div>
+                                <div class="row col-12 col-lg-6 py-2 ms-lg-4">
+                                    <span class="col-6">高性价比</span>
+                                    <span class="col-6 flex-end  text-end">
+                                        {{ "%.1f" | format( score.cost) }}
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row" id="comments">
+                            {% for comment in comments %}
+                                <div class="card bg-primary border-0 py-4 mb-2">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="font-small">
+                                        <a href="#">
+                                            {% if comment.user.profiles[0] %}
+                                                <img src="{{ url_for('profile_blueprint.profile_photo', filename=comment.user.profiles[0].photo) }}"
+                                                     class="avatar-lg img-fluid rounded-circle me-2">
+                                            {% else %}
+                                                <img src="{{ url_for('profile_blueprint.profile_photo', filename='default-user.png') }}"
+                                                     class="avatar-lg img-fluid rounded-circle me-2" alt="avatar">
+                                            {% endif %}
+
+
+                                            <span class="fw-bold">{{ comment.user.username }}</span>
+                                        </a>
+                                        <span class="ms-2"> {{ comment.comment_date.strftime('%Y年%m月%d日') }}</span>
+                                    </span>
+
+                                    </div>
+                                    <p class="m-0">{{ comment.content }}</p>
+                                </div>
+                            {% endfor %}
+
+                            <div class="card bg-primary border-0  py-4 mb-3">
+                                <a class="m-0 p-0 fw-bold" href="#">
+                                    {% if comments_num > 0 %}
+                                        更多评价
+                                    {% else %}
+                                        暂无评价
+                                    {% endif %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class=" col-xl-4 d-xl-block d-none justify-content-end me-4 ms-5 text-dark">
+                    <form action="{{ url_for('book_blueprint.book') }}" method="post">
+                        <div class="card border-gray-300 p-4">
+                            <div class="card-header border-0 bg-white  pb-0">
+                                <h2 class="h4">￥{{ data.price }}/每晚</h2>
+                                <span>{{ data.title }}</span>
+                            </div>
+                            <div class="card-body">
+
+                                <input type="hidden" value="{{ data.id }}" name="room_id">
+                                <!-- Form -->
+                                <div class="form-group mb-4">
+                                    <label for="start-date">日期</label>
+                                    <div class="input-group align-items-center">
+
+                                        <input
+                                                class="form-control rounded-0" id="start-date"
+                                                type="text" placeholder="入住日期" autocomplete="off" required
+                                                name="start_date"> <i
+                                            class="fas fa-angle-right m-2"></i>
+                                        <input
+                                                class="form-control rounded-0" id="end-date"
+                                                type="text" placeholder="退房日期" autocomplete="off" required
+                                                name="end_date">
+                                    </div>
+                                </div>
+                                <!-- End of Form -->
+                                <div class="form-group">
+                                    <!-- Form -->
+                                    <div class="form-group mb-4">
+                                        <label for="exampleInputPasswordModal1">人数</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon2"><span
+                                                    class="fas fa-unlock-alt"></span></span>
+                                            <select class="form-select" id="select" name="guest_no"
+                                                    aria-label="Default select example">
+                                                <option selected value="1">1人</option>
+                                                <option value="2">2人</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <!-- Form -->
+                                    <div class="form-group mb-4">
+                                        <label for="exampleInputPasswordModal1">姓名</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="check_person" required
+                                                   placeholder="入住登记请填写您的姓名"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <!-- Form -->
+                                    <div class="form-group mb-4">
+                                        <label for="exampleInputPasswordModal1">手机号</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="check_phone" required
+                                                   placeholder="入住登记请填写您的手机号"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid">
+                                    {% if data.status == '1' %}
+                                        <button type="button" class="btn btn-primary" name="book"
+                                                onclick="presubmit(this)">
+                                            预定
+                                        </button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-primary" disabled>
+                                            暂停预定
+                                        </button>
+                                    {% endif %}
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="position-fixed bg-white d-xl-none bottom-0 p-2 text-dark col-12">
+                <div class="row d-flex">
+                    <div class="col-8 d-flex flex-column">
+                        <span>￥{{ data.price }}/每晚</span>
+                        <div>
+                            <span> <i class="fas fa-star"></i></span>
+                            <span> <i class="fas fa-star"></i></span>
+                            <span> <i class="fas fa-star"></i></span>
+                            <span> <i class="fas fa-star"></i></span>
+                            <span> <i class="fas fa-star"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+
+                        <button class="btn btn-primary btn-lg  p-3" data-bs-toggle="modal" data-bs-target="#modal-form"
+                                type="button">
+                            <span class="me-1"></span>
+                            现在预定
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- 预定弹窗 -->
+    <div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered  modal-fullscreen" role="document">
+            <div class="modal-content ">
+                <div class="modal-body p-0">
+                    <div class="card border-gray-300 p-4">
+                        <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        <div class="card-header border-0 bg-white  pb-0">
+                            <h2 class="h4">￥{{ data.price }}/每晚</h2>
+                            <span>{{ data.title }}</span>
+                        </div>
+                        <div class="card-body">
+                            <form action="#" class="mt-4">
+                                <!-- Form -->
+                                <div class="form-group mb-4">
+                                    <label for="start-date">日期</label>
+                                    <div class="input-group align-items-center">
+                                        <input data-datepicker="" class="form-control rounded-0 " id="start-date"
+                                               type="text" placeholder="yyyy-mm-dd" required> <i
+                                            class="fas fa-angle-right m-2"></i>
+                                        <input data-datepicker="" class="form-control rounded-0" id="end-date"
+                                               type="text" placeholder="yyyy-mm-dd" required>
+                                    </div>
+                                </div>
+                                <!-- End of Form -->
+                                <div class="form-group">
+                                    <!-- Form -->
+                                    <div class="form-group mb-4">
+                                        <label for="exampleInputPasswordModal1">人数</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon2"><span
+                                                    class="fas fa-unlock-alt"></span></span>
+                                            <select class="form-select" id="select" aria-label="Default select example">
+                                                <option selected value="1">1人</option>
+                                                <option value="2">2人</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="d-grid">
+                                    <a href="./bill.html" class="btn btn-primary">预定</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'includes/footer.html' %}
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script>
+        Date.prototype.Format = function (fmt) { //author: meizz
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "h+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+        const startDate = document.querySelector('input[name="start_date"]');
+        const endDate = document.querySelector('input[name="end_date"]');
+
+
+
+        const start_datepicker = new Datepicker(startDate, {
+            // ...options
+            format: 'yyyy-mm-dd',
+            minDate: Date.now(),
+            beforeShowDay(date) {
+                <!--
+                {% for booked_date in booked_dates %}
+                     if(date.Format("yyyy-MM-dd") == '{{ booked_date.strftime('%Y-%m-%d') }}'){
+                        return false;
+                     }
+                 {% endfor %}
+                 -->
+                console.log(date.Format("yyyy-MM-dd"))
+
+            }
+        });
+
+        const end_datepicker = new Datepicker(endDate, {
+            // ...options
+            format: 'yyyy-mm-dd',
+            minDate: Date.now(),
+            beforeShowDay(date) {
+                <!--
+                {% for booked_date in booked_dates %}
+                     if(date.Format("yyyy-MM-dd") == '{{ booked_date.strftime('%Y-%m-%d') }}'){
+                        return false;
+                     }
+                 {% endfor %}
+                 -->
+                console.log(date.Format("yyyy-MM-dd"))
+
+            }
+        });
+
+        {#end_datepicker.setOptions(#}
+        {#    {#}
+        {#        format: 'yyyy/mm/dd',#}
+        {#    }#}
+        {#)#}
+        $(document).ready(function () {
+            console.log($('input[name="start_date"]'))
+
+        });
+
+
+
+        function presubmit(obj) {
+            let form = $(obj).parents('form')
+            let start_date = $(form).find('input[name="start_date"]').val()
+            let end_date = $(form).find('input[name="end_date"]').val()
+            let check_person = $(form).find('input[name="check_person"]').val()
+            let check_phone = $(form).find('input[name="check_phone"]').val()
+            if (start_date == '') {
+                alert("请选择入住日期")
+                return
+            }
+            if (end_date == '') {
+                alert("请选择退房日期")
+                return
+            }
+            if (end_date < start_date) {
+                alert("退房日期需大于入住日期")
+                return
+            }
+
+
+            {% for booked_date in booked_dates %}
+                if('{{ booked_date.strftime('%Y-%m-%d') }}' >= start_date && '{{ booked_date.strftime('%Y-%m-%d') }}' <= end_date) {
+                    alert("入住退订期间有其他房客入住，请重新选择")
+                    return false
+                }
+            {% endfor %}
+
+            if (check_person == '') {
+                alert("请填写入住登记人员姓名")
+                return
+            }
+            if (check_phone == '') {
+                alert("请填写入住登记人员手机号")
+                return
+            }
+            form.submit()
+        }
+    // 点赞、取消点赞房间
+    function like(url){
+        $.ajax({
+                url: url,
+                type: "post",
+                dataType: "json",
+                success: function (result) {
+                    if (result.valid == 'success') {
+                        if(result.like == '1'){
+                             $('#like').html('<i class="fa-solid fa-heart  me-2 "></i><span>取消喜欢</span>')
+                        }else{
+                            $('#like').html('<i class="fa-regular fa-heart me-2 "></i><span>喜欢</span>')
+
+                        }
+                    }else{
+                        alert("操作失败")
+                    }
+                }
+            });
+    }
+
+
+    </script>
+{% endblock javascripts %}

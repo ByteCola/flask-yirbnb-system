@@ -1,0 +1,118 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Blank Page {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main>
+
+        {# {% include 'includes/preloader.html' %} #}
+
+        <!-- Hero -->
+        <section class="section-header">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class=" row d-flex ps-0">
+                        <div class="col-4">
+                                <img class="rounded-1" alt=""
+                                    src="https://z1.muscache.cn/im/pictures/miso/Hosting-44974208/original/766ea8b0-176e-49eb-9d39-1eb8d9ef647e.png?aki_policy=large">
+
+                        </div>
+                        <div class="col-8">
+                            <div>
+                                <div class="font-small fw-bold">公寓式酒店内的房间</div>
+                                <div class="font-small  ">
+                                    【京都中心体验♪】京都站&amp;东福寺附近☆预约制停车场一晚500日元※配备厨房♪(Twin)</div>
+                            </div>
+                            <div class="row">
+                                <span class=""><span class="font-small">评分是4.6（满分为5） </span><span class="_a7a5sx"
+                                        aria-hidden="true">&nbsp;(81条评价)</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" border-top pt-2 mt-4">
+                        <h2 tabindex="-1" class="display-4">您的行程</h2>
+                    </div>
+                    <div class="card border-0 mt-3">
+                        <div class="">
+                            <h3 tabindex="-1" class="fs-6">日期</h3>
+                        </div>
+                        <div class="">2月27日至3月6日</div>
+                    </div>
+                    <div class="card border-0 mt-4">
+                        <div class="">
+                            <h3 tabindex="-1" class="fs-6">入住时间</h3>
+                        </div>
+                        <div class="">下午4:00 – 下午6:00</div>
+                    </div>
+                    <div class="card border-0 mt-4">
+                        <div class="">
+                            <h3 tabindex="-1" class="fs-6">房客人数</h3>
+                        </div>
+                        <div class="">2位房客</div>
+                    </div>
+
+                    <div class=" border-top pt-2 mt-4">
+                        <h2 tabindex="-1" class="display-4">价格详情</h2>
+                    </div>
+                    <div class="card border-0 mt-3">
+                        <div class="d-flex justify-content-between">
+                            <h3 tabindex="-1" class="font-small">￥100x2晚</h3>
+                            <span>￥200</span>
+                        </div>
+                    </div>
+                    <div class="card border-0 mt-3">
+                        <div class="d-flex justify-content-between">
+                            <h3 tabindex="-1" class="fs-6 fw-bold">总价</h3>
+                            <span class="fw-bold">￥200</span>
+                        </div>
+                    </div>
+
+                    <div class=" border-top pt-2 mt-4">
+                        <h2 tabindex="-1" class="display-4">付款方式</h2>
+                    </div>
+
+                    <div class="card border-0 mt-3">
+                        <div class="d-flex justify-content-between">
+                            <h3 tabindex="-1" class="fs-6 fw-bold"><i class="fab fa-alipay text-info me-2"></i>支付宝</h3>
+                        </div>
+                    </div>
+
+                    <div class=" border-top pt-2 mt-4">
+                        <a href="javascript:void(0)" class="btn btn-primary p-3 w-100" data-bs-toggle="modal" data-bs-target="#modal-notification">确认付款</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 付款模拟弹窗 -->
+    <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content bg-success text-white">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close bg-gray-500" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="py-3 text-center">
+                        <span class="modal-icon display-1-lg"><span class="far fa-envelope-open"></span></span>
+                        <h2 class="h4 modal-title my-3">模拟支付流程</h2>
+                        <p class="px-lg-5">这里会跳转到支付宝的支付沙箱页面，支付时需要使用沙箱账号进行支付。可以点击付款按钮，进入支付宝支付页面。</p>
+                    </div>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <a href="../home/account.html" class="btn btn-sm btn-white">去支付</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'includes/footer.html' %}
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
